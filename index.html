@@ -18,7 +18,7 @@
             margin: auto;
             overflow: hidden;
         }
-        .people, .tasks, .upload-section {
+        .people, .tasks, .upload-section, .image-upload-section {
             background: white;
             margin: 20px 0;
             padding: 15px;
@@ -35,13 +35,12 @@
             padding: 8px;
             background: #f9f9f9;
             margin-bottom: 5px;
-            /* 使列表项内容可编辑 */
-            contenteditable: true;
+            contenteditable: true; /* 使列表项内容可编辑 */
         }
-        .upload-section input[type="file"] {
+        .upload-section input[type="file"], .image-upload-section input[type="file"] {
             margin-top: 10px;
         }
-        .upload-section button {
+        .upload-section button, .image-upload-section button {
             margin-top: 10px;
             padding: 10px 15px;
             background-color: #4CAF50;
@@ -50,12 +49,19 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .upload-section button:hover {
+        .upload-section button:hover, .image-upload-section button:hover {
             background-color: #45a049;
         }
-        .upload-status {
+        .upload-status, .image-preview {
             margin-top: 10px;
             font-weight: bold;
+        }
+        .image-preview img {
+            max-width: 100%; /* 图片宽度自适应 */
+            height: auto; /* 高度按比例调整 */
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -93,6 +99,13 @@
         </form>
         <div class="upload-status" id="uploadStatus"></div>
     </div>
+
+    <div class="image-upload-section">
+        <h2>上传图片</h2>
+        <input type="file" id="imageInput" accept="image/*">
+        <button type="button" onclick="previewImage()">上传并查看</button>
+        <div class="image-preview" id="imagePreview"></div>
+    </div>
 </div>
 
 <script>
@@ -115,6 +128,33 @@
             uploadStatus.textContent = `文件“${file.name}”上传成功！`;
             uploadStatus.style.color = 'green';
         }, 2000);
+    }
+
+    function previewImage() {
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+
+        if (imageInput.files.length === 0) {
+            imagePreview.innerHTML = '<p style="color: red;">请选择一张图片！</p>';
+            return;
+        }
+
+        const file = imageInput.files[0];
+
+        // 创建一个 FileReader 对象来读取文件
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            // 清空之前的预览内容
+            imagePreview.innerHTML = '';
+            // 创建一个新的 img 元素，并设置其 src 属性为读取到的图片数据
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            imagePreview.appendChild(img);
+        };
+
+        // 读取文件内容
+        reader.readAsDataURL(file);
     }
 </script>
 </body>
