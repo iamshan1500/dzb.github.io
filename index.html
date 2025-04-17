@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <title>党支部</title>
@@ -11,94 +10,152 @@
             padding: 0;
             background-color: #f4f4f4;
         }
-
-        .header {
-            text-align: center; /* 居中党支部标题 */
-        }
-
         .header h1 {
-            color: red;
+            color: red; /* 标题字体颜色改为红色 */
         }
-
         .container {
             width: 80%;
             margin: auto;
             overflow: hidden;
         }
-
-        .people,
-        .tasks,
-        .upload-section,
-        .image-upload-section {
+        .people, .tasks, .upload-section, .image-upload-section {
             background: white;
             margin: 20px 0;
             padding: 15px;
             border-radius: 5px;
         }
-
         h2 {
             color: #4CAF50;
         }
-
         ul {
             list-style-type: none;
             padding: 0;
         }
-
         ul li {
             padding: 8px;
             background: #f9f9f9;
             margin-bottom: 5px;
-            contenteditable: true;
+            contenteditable: true; /* 使列表项内容可编辑 */
+        }
+        .upload-section input[type="file"], .image-upload-section input[type="file"] {
+            margin-top: 10px;
+        }
+        .upload-section button, .image-upload-section button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .upload-section button:hover, .image-upload-section button:hover {
+            background-color: #45a049;
+        }
+        .upload-status, .image-preview {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .image-preview img {
+            max-width: 100%; /* 图片宽度自适应 */
+            height: auto; /* 高度按比例调整 */
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
     </style>
 </head>
-
 <body>
-    <div class="header">
-        <h1>党支部</h1>
+<div class="header">
+    <h1>党支部</h1>
+</div>
+
+<div class="container">
+    <div class="people">
+        <h2>人员信息</h2>
+        <ul>
+            <li>张三 - 党支部书记</li>
+            <li>李四 - 组织委员</li>
+            <li>王五 - 宣传委员</li>
+            <!-- 可以添加更多人员 -->
+        </ul>
     </div>
 
-    <div class="container">
-        <div class="people">
-            <h2>人员信息</h2>
-            <ul id="peopleList">
-                <li>张三 - 党支部书记</li>
-                <li>李四 - 组织委员</li>
-                <li>王五 - 宣传委员</li>
-                <!-- 可以添加更多人员 -->
-            </ul>
-        </div>
-        <!-- ...其他部分保持不变... -->
+    <div class="tasks">
+        <h2>任务详情</h2>
+        <ul>
+            <li>组织党员学习党的最新政策（负责人：张三）</li>
+            <li>社区志愿服务活动策划与执行（负责人：李四）</li>
+            <li>宣传党的光辉历程（负责人：王五）</li>
+            <!-- 可以添加更多任务 -->
+        </ul>
     </div>
 
-    <script>
-        // 增加对人员信息的编辑和保存功能
-        document.getElementById('peopleList').addEventListener('input', function (e) {
-            const target = e.target;
+    <div class="upload-section">
+        <h2>上传文档</h2>
+        <form id="uploadForm">
+            <input type="file" id="fileInput" name="document" accept=".pdf,.doc,.docx">
+            <button type="button" onclick="uploadFile()">上传</button>
+        </form>
+        <div class="upload-status" id="uploadStatus"></div>
+    </div>
 
-            if (target.tagName.toLowerCase() === 'li') {
-                // 使用 localStorage 保存编辑后的数据
-                localStorage.setItem(target.dataset.index, target.innerHTML);
-            }
-        });
+    <div class="image-upload-section">
+        <h2>上传图片</h2>
+        <input type="file" id="imageInput" accept="image/*">
+        <button type="button" onclick="previewImage()">上传并查看</button>
+        <div class="image-preview" id="imagePreview"></div>
+    </div>
+</div>
 
-        // 页面加载时恢复之前保存的数据
-        window.onload = function () {
-            const peopleList = document.getElementById('peopleList');
-            for (let i = 0; i < peopleList.children.length; i++) {
-                const item = peopleList.children[i];
-                item.contentEditable = true;
-                item.dataset.index = i; // 添加一个标识符以便保存和检索
+<script>
+    function uploadFile() {
+        const fileInput = document.getElementById('fileInput');
+        const uploadStatus = document.getElementById('uploadStatus');
 
-                // 尝试从 localStorage 恢复数据
-                const savedData = localStorage.getItem(i);
-                if (savedData !== null) {
-                    item.innerHTML = savedData;
-                }
-            }
+        if (fileInput.files.length === 0) {
+            uploadStatus.textContent = '请选择一个文件！';
+            uploadStatus.style.color = 'red';
+            return;
+        }
+
+        const file = fileInput.files[0];
+        uploadStatus.textContent = `正在上传文件：${file.name}...`;
+        uploadStatus.style.color = 'blue';
+
+        // 模拟文件上传过程（您可以替换为实际的后端上传逻辑）
+        setTimeout(() => {
+            uploadStatus.textContent = `文件“${file.name}”上传成功！`;
+            uploadStatus.style.color = 'green';
+        }, 2000);
+    }
+
+    function previewImage() {
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+
+        if (imageInput.files.length === 0) {
+            imagePreview.innerHTML = '<p style="color: red;">请选择一张图片！</p>';
+            return;
+        }
+
+        const file = imageInput.files[0];
+
+        // 创建一个 FileReader 对象来读取文件
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            // 清空之前的预览内容
+            imagePreview.innerHTML = '';
+            // 创建一个新的 img 元素，并设置其 src 属性为读取到的图片数据
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            imagePreview.appendChild(img);
         };
-    </script>
-</body>
 
+        // 读取文件内容
+        reader.readAsDataURL(file);
+    }
+</script>
+</body>
 </html>
