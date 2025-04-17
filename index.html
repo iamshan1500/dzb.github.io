@@ -1,139 +1,121 @@
-import React, { useState } from 'react';
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>党支部</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header h1 {
+            color: red; /* 标题字体颜色改为红色 */
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .people, .tasks, .upload-section {
+            background: white;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #4CAF50;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            padding: 8px;
+            background: #f9f9f9;
+            margin-bottom: 5px;
+            /* 使列表项内容可编辑 */
+            contenteditable: true;
+        }
+        .upload-section input[type="file"] {
+            margin-top: 10px;
+        }
+        .upload-section button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .upload-section button:hover {
+            background-color: #45a049;
+        }
+        .upload-status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>党支部</h1>
+</div>
 
-const TaskManagementApp = () => {
-  const [tasks, setTasks] = useState([]);
-  const [newTaskTitle, setNewTaskTitle] = useState('');
-  const [newTaskDescription, setNewTaskDescription] = useState('');
-  const [newTaskDeadline, setNewTaskDeadline] = useState('');
-  const [applications, setApplications] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isManager, setIsManager] = useState(false);
-
-  const users = [
-    { username: 'admin', role: 'manager' },
-    { username: 'user1', role: 'employee' },
-    { username: 'user2', role: 'employee' }
-  ];
-
-  const login = (username) => {
-    const user = users.find(u => u.username === username);
-    if (user) {
-      setCurrentUser(user);
-      setIsManager(user.role === 'manager');
-    }
-  };
-
-  const logout = () => {
-    setCurrentUser(null);
-    setIsManager(false);
-  };
-
-  const addTask = () => {
-    if (isManager && newTaskTitle && newTaskDescription && newTaskDeadline) {
-      setTasks([...tasks, { id: Date.now(), title: newTaskTitle, description: newTaskDescription, deadline: newTaskDeadline, applicants: [] }]);
-      setNewTaskTitle('');
-      setNewTaskDescription('');
-      setNewTaskDeadline('');
-    }
-  };
-
-  const applyForTask = (taskId, applicantName) => {
-    setApplications(applications.map(application =>
-      application.taskId === taskId ? { ...application, applicants: [...application.applicants, applicantName] } : application
-    ));
-  };
-
-  const approveApplication = (taskId, applicantIndex) => {
-    setApplications(applications.map(application =>
-      application.taskId === taskId ? { ...application, approvedApplicant: application.applicants[applicantIndex] } : application
-    ));
-  };
-
-  return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
-      <h1>任务管理</h1>
-      
-      {/* Login Section */}
-      {!currentUser && (
-        <div>
-          <h2>登录</h2>
-          <select onChange={(e) => login(e.target.value)}>
-            <option value="">选择用户</option>
-            {users.map(user => (
-              <option key={user.username} value={user.username}>{user.username}</option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      {currentUser && (
-        <>
-          <div>
-            <h2>欢迎, {currentUser.username}</h2>
-            <button onClick={logout}>退出</button>
-          </div>
-
-          {/* Manager Section */}
-          {isManager && (
-            <div>
-              <h2>发布新任务</h2>
-              <input 
-                type="text" 
-                placeholder="任务标题" 
-                value={newTaskTitle} 
-                onChange={(e) => setNewTaskTitle(e.target.value)} 
-                style={{ marginRight: '10px' }}
-              />
-              <textarea 
-                placeholder="任务描述" 
-                value={newTaskDescription} 
-                onChange={(e) => setNewTaskDescription(e.target.value)}
-                style={{ width: '100%', marginBottom: '10px' }}
-              />
-              <input 
-                type="date" 
-                value={newTaskDeadline} 
-                onChange={(e) => setNewTaskDeadline(e.target.value)}
-                style={{ marginBottom: '10px' }}
-              />
-              <button onClick={addTask}>发布任务</button>
-            </div>
-          )}
-
-          {/* Tasks List */}
-          <div>
-            <h2>任务列表</h2>
-            {tasks.map(task => (
-              <div key={task.id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
-                <h3>{task.title}</h3>
-                <p>{task.description}</p>
-                <p><strong>截止日期:</strong> {task.deadline}</p>
-                <div>
-                  <h4>申请者</h4>
-                  {applications.find(app => app.taskId === task.id)?.applicants?.map((applicant, index) => (
-                    <div key={index}>
-                      {applicant}
-                      {!applications.find(app => app.taskId === task.id)?.approvedApplicant && isManager && (
-                        <button onClick={() => approveApplication(task.id, index)}>批准</button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-                {!isManager && (
-                  <div>
-                    <button onClick={() => applyForTask(task.id, currentUser.username)}>申请</button>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </>
-      )}
+<div class="container">
+    <div class="people">
+        <h2>人员信息</h2>
+        <ul>
+            <li>张三 - 党支部书记</li>
+            <li>李四 - 组织委员</li>
+            <li>王五 - 宣传委员</li>
+            <!-- 可以添加更多人员 -->
+        </ul>
     </div>
-  );
-};
 
-export default TaskManagementApp;
+    <div class="tasks">
+        <h2>任务详情</h2>
+        <ul>
+            <li>组织党员学习党的最新政策（负责人：张三）</li>
+            <li>社区志愿服务活动策划与执行（负责人：李四）</li>
+            <li>宣传党的光辉历程（负责人：王五）</li>
+            <!-- 可以添加更多任务 -->
+        </ul>
+    </div>
 
+    <div class="upload-section">
+        <h2>上传文档</h2>
+        <form id="uploadForm">
+            <input type="file" id="fileInput" name="document" accept=".pdf,.doc,.docx">
+            <button type="button" onclick="uploadFile()">上传</button>
+        </form>
+        <div class="upload-status" id="uploadStatus"></div>
+    </div>
+</div>
 
+<script>
+    function uploadFile() {
+        const fileInput = document.getElementById('fileInput');
+        const uploadStatus = document.getElementById('uploadStatus');
 
+        if (fileInput.files.length === 0) {
+            uploadStatus.textContent = '请选择一个文件！';
+            uploadStatus.style.color = 'red';
+            return;
+        }
+
+        const file = fileInput.files[0];
+        uploadStatus.textContent = `正在上传文件：${file.name}...`;
+        uploadStatus.style.color = 'blue';
+
+        // 模拟文件上传过程（您可以替换为实际的后端上传逻辑）
+        setTimeout(() => {
+            uploadStatus.textContent = `文件“${file.name}”上传成功！`;
+            uploadStatus.style.color = 'green';
+        }, 2000);
+    }
+</script>
+</body>
+</html>
