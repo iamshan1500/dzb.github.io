@@ -21,7 +21,7 @@
             margin: auto;
             overflow: hidden;
         }
-        .people, .tasks {
+        .people, .tasks, .upload-section {
             background: white;
             margin: 20px 0;
             padding: 15px;
@@ -38,6 +38,25 @@
             padding: 8px;
             background: #f9f9f9;
             margin-bottom: 5px;
+        }
+        .upload-section input[type="file"] {
+            margin-top: 10px;
+        }
+        .upload-section button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .upload-section button:hover {
+            background-color: #45a049;
+        }
+        .upload-status {
+            margin-top: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -66,6 +85,38 @@
             <!-- 可以添加更多任务 -->
         </ul>
     </div>
+
+    <div class="upload-section">
+        <h2>上传文档</h2>
+        <form id="uploadForm">
+            <input type="file" id="fileInput" name="document" accept=".pdf,.doc,.docx">
+            <button type="button" onclick="uploadFile()">上传</button>
+        </form>
+        <div class="upload-status" id="uploadStatus"></div>
+    </div>
 </div>
+
+<script>
+    function uploadFile() {
+        const fileInput = document.getElementById('fileInput');
+        const uploadStatus = document.getElementById('uploadStatus');
+
+        if (fileInput.files.length === 0) {
+            uploadStatus.textContent = '请选择一个文件！';
+            uploadStatus.style.color = 'red';
+            return;
+        }
+
+        const file = fileInput.files[0];
+        uploadStatus.textContent = `正在上传文件：${file.name}...`;
+        uploadStatus.style.color = 'blue';
+
+        // 模拟文件上传过程（您可以替换为实际的后端上传逻辑）
+        setTimeout(() => {
+            uploadStatus.textContent = `文件“${file.name}”上传成功！`;
+            uploadStatus.style.color = 'green';
+        }, 2000);
+    }
+</script>
 </body>
 </html>
